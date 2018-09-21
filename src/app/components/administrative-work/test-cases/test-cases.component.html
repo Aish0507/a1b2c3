@@ -1,0 +1,64 @@
+<div class="col-lg-12">
+  <mat-form-field>
+    <mat-select placeholder="Select Application"
+                [(ngModel)]="selectedAppValue"
+                name="application"
+                (change) = "fetchTcData($event)"
+                >
+      <mat-option *ngFor="let app of applicationList" 
+                  [value]="app.applicationId">
+        {{app.applicationName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="col-lg-12" *ngIf="tc">
+  <mat-form-field style="width: 100%" class="mb-1">
+  <input matInput placeholder="Type to filter the Test Case column..." required (keyup)='updateFilter($event)'>
+</mat-form-field>
+<div fxLayout="row wrap">
+  <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="end" >
+    <button mat-mini-fab color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+<ngx-datatable
+  class="material"
+  [rows]="tc"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="'auto'"
+  [limit]="10">
+  <ngx-datatable-column name="No#">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      No#
+    </ng-template>
+    <ng-template let-rowIndex="rowIndex"  ngx-datatable-cell-template>
+      {{rowIndex + 1 }}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Test Case">
+    <ng-template let-column="column" ngx-datatable-header-template>
+        Test Case
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+     {{row.testcaseName}}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Test Case Details">
+    <ng-template let-column="column" ngx-datatable-header-template>
+        Test Case Details
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+     {{row.testcaseDescription}}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Action">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <a><mat-icon (click)="openUpdateDialog(row)">edit</mat-icon></a>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>
+</div>

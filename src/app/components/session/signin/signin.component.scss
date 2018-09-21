@@ -1,0 +1,65 @@
+.login-title {
+  color: #00A4E4;
+}
+.session-content-login {
+  //margin-bottom: 22% !important;
+}
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+//.session-login {
+//  min-height: 1vh !important;
+//}
+.session-wrapper {
+  max-width: 281px !important;
+}
+.mat-indigo-bg {
+  background-image: url(/assets/images/aig-login-bg-1.jpg);
+  background-repeat: no-repeat;
+  margin: auto;
+  background-size: 100% 100%;
+}
+.mat-card {
+  opacity: 0.85 !important;
+  border-radius: 5px !important;
+}
+.login-button {
+  border-radius: 20px;
+  //background-image: url(/assets/images/yellow-button.jpg);
+  //background-repeat: no-repeat;
+}
+.custom-select {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='gray' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E");
+  border-radius: 1px !important;
+  font-size: 14px !important;
+}
+.form-control {
+  border-radius: 1px !important;
+  font-size: 14px !important;
+}

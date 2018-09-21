@@ -1,0 +1,57 @@
+<mat-form-field style="width: 100%" class="mb-1">
+  <input matInput placeholder="Type to filter by Project name"  (keyup)='updateFilter($event)'>
+</mat-form-field>
+<div fxLayout="row wrap">
+  <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="end" >
+      <a (click)="openAddDialog()">
+          <!-- <mat-icon>add</mat-icon> -->
+          <img src="/assets/images/add.png">
+        </a>
+  </div>
+</div>
+<ngx-datatable
+  class="material"
+  [rows]="projectList"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="'auto'"
+  [limit]="10">
+  <ngx-datatable-column name="No#">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      No#
+    </ng-template>
+    <ng-template let-rowIndex="rowIndex"  ngx-datatable-cell-template>
+      {{rowIndex + 1 }}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Project ">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      Project
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+     {{row.projectName}}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Project Details">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      Project Details
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+     {{row.projectDetails}}
+    </ng-template>
+  </ngx-datatable-column>
+  <!-- <ngx-datatable-column name="Project Status">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      Project Status
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+     Active
+    </ng-template>
+  </ngx-datatable-column> -->
+  <ngx-datatable-column name="Action">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <a (click)="openUpdateDialog(row)"><img class="icon"src="/assets/images/edit.png"></a>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>

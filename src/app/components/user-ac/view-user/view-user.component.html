@@ -1,0 +1,156 @@
+<!--<mat-toolbar color="primary">-->
+  <!--<mat-toolbar-row></mat-toolbar-row>-->
+  <!--<mat-toolbar-row></mat-toolbar-row>-->
+<!--</mat-toolbar>-->
+<div fxLayout="row wrap" fxLayoutAlign="center start">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card class="">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template matTabLabel>Personal Information</ng-template>
+          <mat-card-content>
+            <form fxLayout="column">
+
+              <mat-form-field class="mb-1">
+                <!--<input matInput placeholder="First name">-->
+                <input matInput
+                       placeholder="First Name"
+                       [disabled]="true"
+                       [value]="data.body.firstName"
+                       name="first">
+              </mat-form-field>
+
+              <mat-form-field class="mb-1">
+                <!--<input matInput placeholder="Last name">-->
+                <input matInput
+                       placeholder="Last Name"
+                       name="last"
+                       [value]="data.body.lastName"
+                       [disabled]="true">
+              </mat-form-field>
+
+              <mat-form-field class="mb-1">
+                <input matInput
+                       placeholder="Email ID"
+                       name="full"
+                       [value]="data.body.emailId"
+                       [disabled]="true">
+              </mat-form-field>
+
+              <div> 
+                <mat-form-field class="mb-1" style="margin-right: 20px">
+                  <mat-select placeholder="Update Role" [(value)]="selectedRole" (change) = "getUserRoleVal(selectedRole)">
+                    <mat-option *ngFor="let role of userRoleList" [value]="role.roleType">
+                      {{role.roleType}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button mat-raised-button
+                           (click)="updateRoleType(selectedRole)"
+                           color="primary">Update</button>
+              </div>
+              <div>
+                  <mat-form-field class="mb-1" style="margin-right: 20px">
+                    <mat-select placeholder="Change Status" [(value)]="status">
+                        <mat-option value="ACTIVE">
+                            ACTIVE
+                        </mat-option>
+                        <mat-option  value="INACTIVE">
+                            INACTIVE
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button mat-raised-button
+                             (click)="updateStatus(status)"
+                             color="primary">Update</button>
+                </div>
+            </form>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>Application</ng-template>
+          <mat-card-content>
+            <form fxLayout="column">
+              <div class="mb-1">
+                <ng-container *ngIf="data.body.moreInfo">
+                  <ssp-table-data
+                    *ngIf="!isTreeViewEnable"
+                    [items] = "data.body.moreInfo">
+                  </ssp-table-data>
+                </ng-container>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-tab>
+        <mat-tab>
+          <ng-template matTabLabel>Edit Access</ng-template>
+          <mat-card-content>
+            <form fxLayout="column">
+              <mat-form-field class="mb-1">
+                <mat-select placeholder="Select Project"
+                            [(ngModel)]="registeredUserObj.selectedProValue"
+                            name="projects"
+                            (change) = "fetchBuData($event)">
+                  <mat-option *ngFor="let project of jobs?.projects"
+                              [value]="project?.projectId">
+                    {{project?.projectName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="mb-1">
+                <mat-select placeholder="Select BU"
+                            [(ngModel)]="registeredUserObj.selectedBuValue"
+                            name="bu"
+                            [disabled]="isbuEnable"
+                            (change) = "fetchAppData($event)">
+                  <mat-option *ngFor="let bu of buDataSet"
+                              [value]="bu?.buId">
+                    {{bu.buName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <ng-container *ngIf="applicationDataSet">
+                <ng-container *ngIf="applicationDataSet?.length > 0; else nodata">
+                  <div fxLayout="column">
+                    <mat-checkbox
+                      name="checkall"
+                      [(ngModel)]= "selectedAll"
+                      (change)="selectAll();">
+                      Select all
+                    </mat-checkbox>
+                    <mat-checkbox
+                      *ngFor="let app of applicationDataSet; let i = index"
+                      name="status"
+                      [(ngModel)]= "app.status"
+                      (click)="selectSingleVal(app, app.status)"
+                      (change)="checkIfAllSelected();">
+                      {{app.applicationName}}
+                    </mat-checkbox>
+                  </div>
+                </ng-container>
+                <ng-template #nodata>
+                  <p class="alert-danger">
+                    Don't have application data for the selection or data is already assigned to
+                    <strong>
+                      {{data.body.firstName}}
+                    </strong>
+                  </p>
+                </ng-template>
+              </ng-container>
+            </form>
+          </mat-card-content>
+        </mat-tab>
+      </mat-tab-group>
+      <hr>
+      <mat-card-actions fxLayoutAlign="end">
+        <button mat-raised-button
+                class="shadow-none"
+                (click)="updateUser(registeredUserObj)"
+                *ngIf="deleteArrayObj.length > 0">Update</button>
+        <button mat-raised-button
+                color="primary"
+                (click)="gotToListPage()">Cancel</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+.input-full-width {
+  width: 100% !important;
+}
+:host ::ng-deep .index-column,
+:host ::ng-deep .index-column-header {
+  text-align: right;
+}
+
+:host ::ng-deep .data-table .data-table-row.selected {
+  background-color: #E4EDF9 !important;
+}
+.text-md {
+  font-size: 95% !important;
+  font-weight: 500 !important;
+}
+h2.small-header {
+  font-size: 30px !important;
+}
+.custom-border {
+  border-bottom:  1px solid #ccc !important;
+}
+.custom-border-right{
+  border-right: 1px solid #ccc;
+}
+.inside-content {
+  margin-right: 1% !important;
+}
+.green {
+  background-color:rgb(6, 250, 6) !important;
+}
+.amazon-green {
+  background-color: rgb(4, 250, 17) !important;
+}
+.analogous-red {
+  background-color:red;
+}
+.spanish-gray {
+  background-color: #949393 !important;
+}
+.azure-blue {
+  background-color: #0184FD !important;
+}
+.black-olive {
+  background-color: #3A3A3A;
+}
+.yellow {
+  background-color: rgb(219, 191, 33);
+}
+.darkgreen {
+  background-color:darkgreen !important;
+}
+.lightgreen {
+  background-color:rgb(73, 247, 73) !important;
+}
+.jumbotron-fluid {
+  padding-top: 1rem !important;
+}
+.shadow-none {
+  display: none !important;
+}
+.margin-left-custom {
+  margin-left: 41% !important;
+  color: #FFFFFF;
+}
+.bg-color-for-total {
+  background-color: #0184FD !important;
+}
+div.small-header {
+  font-size: 30px !important;
+}
+.bg-dark {
+  background-color: #82c250 !important;
+}
+.bg-info {
+  background-color: #6093ff !important;
+}
+.bg-primary {
+  background-color: #ffc44c !important;
+}
+.bg-secondary {
+  background-color: #f87d51 !important;
+}
+.bg-success {
+  background-color: #98d367 !important;
+}
+.bg-danger {
+  background-color: #ed4d4d !important;
+}
+.jumbotron-custom {
+  background-color: #f0f2f5 !important;
+}
+.bg-warning {
+  background-color: #ed5564 !important;
+}
+/* .data-table-column {
+  font-size: 1px;
+} */
+.card {
+  border: 0px solid rgba(0, 0, 0, 0.125)!important;
+  border-radius: 0px !important;
+}
+.card-header {
+  border-radius: 0px !important;
+}
+.main-bg-color {
+  background-color: #f0f2f5 !important;
+}
+.jumbotron-custom-another {
+  background-color: #e7ecf3 !important;
+}
+.left-align-dashboard {
+  padding-left: 20px !important;
+}

@@ -1,0 +1,42 @@
+<div>
+  <h4>List of Details</h4>
+  <mat-table #table
+             [dataSource]="dataSource"
+             matSort>
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>
+        No#
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="applicationName">
+      <mat-header-cell *matHeaderCellDef>
+        Application name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.application.applicationName}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="buName">
+      <mat-header-cell *matHeaderCellDef>
+        BU Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.bu.buName}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="projectName">
+      <mat-header-cell *matHeaderCellDef>
+         Project Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.project.projectName}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef>
+       Delete
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <!--<i class="fa fa-trash" aria-hidden="true" title="Remove" (click)="removeItem(element)"></i>-->
+        <mat-icon (click)="removeItem(element)" class="cursor" [ngStyle] = "{'text-align': 'right'}">delete</mat-icon>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>

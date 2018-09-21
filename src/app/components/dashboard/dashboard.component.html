@@ -1,0 +1,554 @@
+<div fxLayout="row wrap" class="pt-3 pb-3 text-white welcome">
+    <div  class="ml-5 pt-3 " fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="50" fxLayoutAlign="start">
+      <p class="h5">Welcome {{fullName}}!</p>
+      </div>
+      <div  class="ml-5 " fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="50" fxLayoutAlign="start">
+      <p class="h3"> Self Service Portal</p>
+    </div>
+  </div>
+  <mat-tab-group color="primary" #tabGroup>
+    <mat-tab label="Test Execution">
+      <div class="main-bg-color">
+        <div class="jumbotron jumbotron-fluid jumbotron-custom">
+          <div fxLayout="row wrap">
+            <div fxFlex.gt-sm="70" fxFlex.gt-xs="50" fxFlex="50" fxLayoutAlign="first" class="left-align-dashboard">
+              <h2>
+                BU Level Application Status
+              </h2>
+              <span class="text-muted pt-2">
+                &nbsp;({{this.objChartFilter.startDate | date}} to {{objChartFilter.endDate | date}})
+              </span>
+            </div>
+            <div fxFlex.gt-sm="30" fxFlex.gt-xs="50" fxFlex="50" fxLayoutAlign="end" (click)="activeChartFilter()">
+              <img class="icon"src="/assets/images/filter.png">
+            </div>
+            <ng-container *ngIf="isChartFilterActive">
+              <div fxFlex.gt-sm="15%" fxFlex.gt-xs="50" fxFlex="100">
+              </div>
+              <div fxFlex.gt-sm="33%" fxFlex.gt-xs="50" fxFlex="100">
+                <mat-card>
+                  <mat-card-title-group>
+                    <mat-card-title>Select Project</mat-card-title>
+                  </mat-card-title-group>
+                  <mat-card-content>
+                    <mat-form-field class="input-full-width">
+                      <mat-select name="projects"
+                                  [formControl]="projectChartFilter">
+                        <mat-option *ngFor="let project of tempProjectData?.projects"
+                                    [value]="project">
+                          {{project?.projectName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <!--<div fxFlex.gt-sm="33%" fxFlex.gt-xs="50" fxFlex="100">-->
+              <!--<mat-card>-->
+              <!--<mat-card-title-group>-->
+              <!--<mat-card-title>Select BU</mat-card-title>-->
+              <!--</mat-card-title-group>-->
+              <!--<mat-card-content>-->
+              <!--<mat-form-field>-->
+              <!--<mat-select name="bu"-->
+              <!--[formControl]="buChartFilter">-->
+              <!--<mat-option *ngFor="let bu of buList"-->
+              <!--[value]="bu.buDetails?.buName">-->
+              <!--{{bu?.buDetails?.buName}}-->
+              <!--</mat-option>-->
+              <!--</mat-select>-->
+              <!--</mat-form-field>-->
+              <!--</mat-card-content>-->
+              <!--</mat-card>-->
+              <!--</div>-->
+              <div fxFlex.gt-sm="33%" fxFlex.gt-xs="50" fxFlex="100">
+                <mat-card>
+                  <mat-card-title-group>
+                    <mat-card-title>Select Date</mat-card-title>
+                  </mat-card-title-group>
+                  <mat-card-content>
+                    <div fxLayout="row wrap">
+                      <div fxFlex.gt-sm="50"
+                           fxFlex.gt-xs="50"
+                           fxFlex="100"
+                           fxLayoutAlign="left">
+                        <mat-form-field style="width: 55%">
+                          <input matInput
+                                 [matDatepicker]="chartStartDatePicker"
+                                 placeholder="Choose start date"
+                                 [(ngModel)]="startDateChartFilter"
+                                 (focus)="_openCalendarChartStartDate(chartStartDatePicker)"
+                                 (ngModelChange)="changeStartDate()"
+                                 #elementToFocusChartStart>
+                          <mat-datepicker-toggle matSuffix [for]="chartStartDatePicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #chartStartDatePicker="matDatepicker" ></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex.gt-sm="50"
+                           fxFlex.gt-xs="50"
+                           fxFlex="100"
+                           fxLayoutAlign="right">
+                        <mat-form-field style="width: 55%">
+                          <input matInput
+                                 [matDatepicker]="chartEndDatePicker"
+                                 placeholder="Choose end date"
+                                 [(ngModel)]="endDateChartFilter"
+                                 (focus)="_openCalendarChartEndDate(chartEndDatePicker)"
+                                 (ngModelChange)="changeEndDate()"
+                                 #elementToFocusChartEnd>
+                          <mat-datepicker-toggle matSuffix [for]="chartEndDatePicker"></mat-datepicker-toggle>
+                          <mat-datepicker #chartEndDatePicker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div fxFlex.gt-sm="19%" fxFlex.gt-xs="50" fxFlex="100">
+              </div>
+              <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                <div fxLayout="row" fxLayoutAlign="center">
+                  <div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="50" fxFlex="100">
+                  </div> &nbsp;
+                  <div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="50" fxFlex="100">
+                    <button mat-raised-button color="primary"
+                            (click)="applyFilter()"
+                            [disabled]="!isDateSelected">Apply</button>
+                    <button mat-raised-button color="primary"
+                            (click)="resetChartFilterValue()">Clear</button>
+                    <button mat-raised-button color="primary"
+                            (click)="activeChartFilter()">Cancel</button>
+                  </div> &nbsp;
+                  <div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="50" fxFlex="100">
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="buLevelresult?.length > 0; else noBuData">
+              <div fxFlex.gt-sm="{{pieChartFx}}" fxFlex.gt-xs="40"
+                   fxFlex="100%" *ngFor="let bu of buLevelresult">
+                   <ng-container *ngIf="buLevelresult?.length > 1 ; else multiBuData">
+                <mat-card *ngIf=" bu?.completedApplication.executed || bu?.runningApplication || bu?.scheduledApplication">
+
+                  <mat-card-title><div *ngIf="projectChartFilter.value && isFilterApplied">{{projectChartFilter?.value?.projectName}}/</div> {{bu?.buDetails?.buName}}
+                  </mat-card-title>
+                  <mat-card-content>
+                    <canvas
+                      baseChart
+                      class="chart"
+                      #pieChart="base-chart"
+                      [data]=[bu?.completedApplication.executed,bu?.runningApplication,bu?.scheduledApplication]
+                      [options]="doughnutOptions"
+                      [colors]="doughnutChartColors"
+                      [labels]="pieChartLabels"
+                      [chartType]="doughnutChartType"></canvas>
+                  </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="! (bu?.completedApplication.executed || bu?.runningApplication || bu?.scheduledApplication)"
+                          [ngStyle]= "getHeightForNoData()">
+                  <mat-card-title><div *ngIf="projectChartFilter.value && isFilterApplied">{{projectChartFilter?.value?.projectName}}/</div> {{bu?.buDetails?.buName}}
+                  </mat-card-title>
+                  <mat-card-content >
+                    <div [ngStyle]="getHeight()">
+                      NO DATA FOUND
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </ng-container>
+              <ng-template #multiBuData>
+                <mat-card *ngIf=" bu?.completedApplication.executed || bu?.runningApplication || bu?.scheduledApplication">
+
+                  <mat-card-title><div *ngIf="projectChartFilter.value && isFilterApplied">{{projectChartFilter?.value?.projectName}}/</div> {{bu?.buDetails?.buName}}
+                  </mat-card-title>
+                  <mat-card-content>
+                    <canvas
+                      baseChart
+                      class="chart"
+                      height="65"
+                      #pieChart="base-chart"
+                      [data]=[bu?.completedApplication.executed,bu?.runningApplication,bu?.scheduledApplication]
+                      [options]="doughnutOptions"
+                      [colors]="doughnutChartColors"
+                      [labels]="pieChartLabels"
+                      [chartType]="doughnutChartType"></canvas>
+                  </mat-card-content>
+                </mat-card>
+                <mat-card *ngIf="! (bu?.completedApplication.executed || bu?.runningApplication || bu?.scheduledApplication)"
+                          [ngStyle]= "getHeightForNoData()">
+                  <mat-card-title><div *ngIf="projectChartFilter.value && isFilterApplied">{{projectChartFilter?.value?.projectName}}/</div> {{bu?.buDetails?.buName}}
+                  </mat-card-title>
+                  <mat-card-content >
+                    <div [ngStyle]="getHeight()">
+                      NO DATA FOUND
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </ng-template>
+              </div>
+            </ng-container>
+            <ng-template #noBuData>
+              <h2 class="left-align-dashboard">NO DATA AVAILABLE</h2>
+            </ng-template>
+          </div>
+        </div>
+        <!--  -->
+        <div class="jumbotron jumbotron-fluid jumbotron-custom-another" *ngIf="appLevelresult" style="margin-top: -6.3%;">
+          <div fxLayout="row wrap">
+            <div fxFlex.gt-sm="70" fxFlex.gt-xs="50" fxFlex="50" fxLayoutAlign="first" class="left-align-dashboard">
+              <h2>
+                Application Level Data Execution
+              </h2>
+              <span class="text-muted pt-2">
+                &nbsp;({{objFilter.startDate | date}} to {{objFilter.endDate | date}})
+              </span>
+            </div>
+            <div fxFlex.gt-sm="30" fxFlex.gt-xs="50" fxFlex="50" fxLayoutAlign="end" (click)="activeFilter()">
+              <img class="icon"src="/assets/images/filter.png">
+            </div>
+            <ng-container *ngIf="isFilterActive">
+              <div fxFlex.gt-sm="18%" fxFlex.gt-xs="50" fxFlex="100">
+                <mat-card>
+                  <mat-card-title-group>
+                    <mat-card-title>Select Project</mat-card-title>
+                  </mat-card-title-group>
+                  <mat-card-content>
+                    <mat-form-field>
+                      <mat-select name="projects"
+                                  [formControl]="project">
+                        <mat-option *ngFor="let project of tempProjectData?.projects"
+                                    [value]="project?.projectId">
+                          {{project?.projectName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div fxFlex.gt-sm="18%" fxFlex.gt-xs="50" fxFlex="100">
+                <mat-card>
+                  <mat-card-title-group>
+                    <mat-card-title>Select Business Unit</mat-card-title>
+                  </mat-card-title-group>
+                  <mat-card-content>
+                    <mat-form-field>
+                      <mat-select name="bu"
+                                  [formControl]="bu">
+                        <mat-option value="All">All</mat-option>
+                        <mat-option *ngFor="let bu of buList"
+                                    [value]="bu.buDetails?.buId">
+                          {{bu?.buDetails?.buName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div fxFlex.gt-sm="18%" fxFlex.gt-xs="50" fxFlex="100">
+                <mat-card>
+                  <mat-card-title-group>
+                    <mat-card-title>Select Environment</mat-card-title>
+                  </mat-card-title-group>
+                  <mat-card-content>
+                    <mat-form-field>
+                      <mat-select name="env"
+                                  [formControl]="env">
+                        <mat-option *ngFor="let env of targetEnvList"
+                                    [value]="env?.targetEnvId">
+                          {{env?.targetEnvName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div fxFlex.gt-sm="18%" fxFlex.gt-xs="50" fxFlex="100">
+                <mat-card>
+                  <mat-card-title-group>
+                    <mat-card-title>Select Application</mat-card-title>
+                  </mat-card-title-group>
+                  <mat-card-content>
+                    <mat-form-field>
+                      <mat-select name="app"
+                                  [formControl]="app">
+                        <mat-option value="All">All</mat-option>
+                        <mat-option *ngFor="let app of applicationList"
+                                    [value]="app.applicationId">
+                          {{app.applicationName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div fxFlex.gt-sm="26%" fxFlex.gt-xs="50" fxFlex="100">
+                <mat-card>
+                  <mat-card-title-group>
+                    <mat-card-title>Select Date</mat-card-title>
+                  </mat-card-title-group>
+                  <mat-card-content>
+                    <div fxLayout="row wrap">
+                      <div fxFlex.gt-sm="50"
+                           fxFlex.gt-xs="50"
+                           fxFlex="100"
+                           fxLayoutAlign="left">
+                        <mat-form-field style="width: 60%">
+                          <input matInput
+                                 [matDatepicker]="startDatePicker"
+                                 placeholder="Choose start date"
+                                 [(ngModel)]="startDate"
+                                 (focus)="_openCalendarStart(startDatePicker)"
+                                 (ngModelChange)="changeTableStartDate()"
+                                 #elementToFocusStart>
+                          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                          <mat-datepicker #startDatePicker="matDatepicker" (closed)="_closeCalendar($event)"></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div fxFlex.gt-sm="50"
+                           fxFlex.gt-xs="50"
+                           fxFlex="100"
+                           fxLayoutAlign="right">
+                        <mat-form-field style="width: 60%">
+                          <input matInput
+                                 [matDatepicker]="eNdDatePicker"
+                                 placeholder="Choose end date"
+                                 [(ngModel)]="endDate"
+                                 (ngModelChange)="changeTableEndDate()"
+                                 (focus)="_openCalendarEnd(eNdDatePicker)"
+                                 #elementToFocusEnd>
+                          <mat-datepicker-toggle matSuffix [for]="eNdDatePicker"></mat-datepicker-toggle>
+                          <mat-datepicker #eNdDatePicker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+                <div fxLayout="row" fxLayoutAlign="center">
+                  <div fxFlex.gt-sm="36.33%" fxFlex.gt-xs="50" fxFlex="100">
+                  </div> &nbsp;
+                  <div fxFlex.gt-sm="30.33%" fxFlex.gt-xs="50" fxFlex="100">
+                    <button mat-raised-button color="primary"
+                            (click)="applyFilterForTable()"
+                            [disabled]="!isTableDateSelected" >Apply</button>
+                    <button mat-raised-button color="primary"
+                            (click)="resetFilterValue()">Clear</button>
+                    <button mat-raised-button color="primary"
+                            (click)="activeFilter()">Cancel</button>
+                  </div> &nbsp;
+                  <div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="50" fxFlex="100">
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <!--<div fxLayout="row">-->
+              <div fxFlex.gt-sm="50" class="mt-2" fxFlex.gt-xs="50" fxFlex="100">
+              <div class="card mr-2">
+                <div class="card-header bg-info text-white  justify-content-center">
+                  <div class="row ">
+                    <div class="col-lg-12">
+                      <p class="small-header float-right" style="font-size: 31px;">{{appLevelresult[0]?.totalApplications}}</p>
+                      <p  style="font-size: 20px;">Total Applications</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class = "container">
+                    <div class = "row">
+                      <div class = "col-lg-4">
+                        <div class="card text-white bg-primary" style="max-width: 18em;">
+                          <div class="card-body text-center">
+                            <div class="small-header">{{appLevelresult[0]?.runningApplication}}</div>
+                            <div class="text-md">Applications <br>Running</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class = "col-lg-4">
+                        <div class="card text-white bg-secondary  " style="max-width: 18em;">
+                          <div class="card-body text-center">
+                            <div class="small-header">{{appLevelresult[0]?.scheduledApplication}}</div>
+                            <div class="text-md">Applications <br> Scheduled</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class = "col-lg-4">
+                        <div class="card text-white bg-warning" style="max-width: 18rem;">
+                          <div class="card-body text-center">
+                            <div class="small-header">{{appLevelresult[0]?.applicationNotScheduled}}</div>
+                            <div class="text-md">Applications Yet to<br> be schedule</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div fxFlex.gt-sm="50" class="mt-2" fxFlex.gt-xs="50" fxFlex="100">
+              <div class="card">
+                <div class="card-header bg-dark text-white">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <p class="small-header float-right" style="font-size: 31px;">
+                        {{appLevelresult[0]?.completedApplication?.executed}}</p>
+                      <p  style="font-size: 20px;">Application Completed</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class = "container">
+                    <div class = "row">
+                      <div class = "col-lg-6">
+                        <div class="card text-white bg-success" style="max-width: 18rem;">
+                          <div class="card-body text-center">
+                            <div class="small-header">{{appLevelresult[0]?.completedApplication?.testCasePassed}}</div>
+                            <div class="text-md">
+                              Applications<br> passed
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class = "col-lg-6">
+                        <div class="card text-white bg-danger" style="max-width: 18rem;">
+                          <div class="card-body text-center">
+                            <div class="small-header">
+                              {{appLevelresult[0]?.completedApplication?.testCaseFailed}}
+                            </div>
+                            <div class="text-md">
+                              Applications<br>failed
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--</div>-->
+          </div>
+          <div class="mt-3" style="width: 100%">
+            <div *ngIf="tEResultSet?.length > 0;else noDataFoundForTable">
+              <data-table id="data-grid"
+                          headerTitle="Application Test Case Data"
+                          [items]="tEResultSet"
+                          [itemCount]="tECount"
+                          (reload)="reloadTestExecution($event)"
+                          [limit]="4"
+                          [sortBy]="'endTime'"
+                          [sortAsc]="false"
+                          [selectColumn]="false"
+                          [multiSelect]="false"
+                          [substituteRows]="false"
+                          [expandableRows]="false"
+                          [translations]="translations"
+                          [selectOnRowClick]="false"
+                          [indexColumn]="false"
+              >
+                <ng-template #dataTableExpand let-item="item">
+                  <div [textContent]="item.description" style="padding: 5px; color: gray"></div>
+                </ng-template>
+                <data-table-column
+                  [property]="'projectName'"
+                  [header]="'Project'"
+                  [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                  [property]="'buName'"
+                  [header]="'Bussiness Unit'"
+                  [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                  [property]="'applicationName'"
+                  [header]="'Application'"
+                  [sortable]="true"
+                  [cellColors]="cellColor">
+                </data-table-column>
+                <data-table-column
+                  [property]="'applicationType'"
+                  [header]="'Testing Framework'"
+                  [sortable]="true"
+                  [cellColors]="cellColor">
+                </data-table-column>
+                <data-table-column
+                  [property]="'startTime'"
+                  [header]="'Start Date'"
+                  [sortable]="true">
+                  <ng-template #dataTableCell let-item="item">
+                    {{item.startTime | date}} {{item.startTime | date:'shortTime'}}
+                  </ng-template>
+                </data-table-column>
+                <data-table-column
+                  [property]="'endTime'"
+                  [header]="'End Date'"
+                  [sortable]="true">
+                  <ng-template #dataTableCell let-item="item">
+                    {{item.endTime | date}} {{item.endTime | date:'shortTime'}}
+                  </ng-template>
+                </data-table-column>
+                <data-table-column
+                  [property]="'totalTestCases'"
+                  [header]="'Total TC'"
+                  [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                  [property]="'executedTestCases'"
+                  [header]="'TC Selected'"
+                  [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                  [property]="'testCasePassed'"
+                  [header]="'# TC Passed'"
+                  [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                  [property]="'testCaseFailed'"
+                  [header]="'# TC Failed'"
+                  [sortable]="true">
+                </data-table-column>
+                <data-table-column
+                  [property]="'passTestCountPercent'"
+                  [header]="'% Pass'"
+                  [sortable]="true">
+                  <ng-template #dataTableCell let-item="item">
+                <span style="color: green" *ngIf="item.passTestCountPercent > 0">
+                  {{item.passTestCountPercent}}
+                </span>
+                    <span style="color: black" *ngIf="item.passTestCountPercent === 0">
+                  {{item.passTestCountPercent}}
+                </span>
+                  </ng-template>
+                </data-table-column>
+                <data-table-column
+                  [property]="'failTestCountPercent'"
+                  [header]="'% Fail'"
+                  [sortable]="true">
+                  <ng-template #dataTableCell let-item="item">
+                <span style="color: red" *ngIf="item.failTestCountPercent > 0">
+                  {{item.failTestCountPercent}}
+                </span>
+                    <span style="color: black" *ngIf="item.failTestCountPercent === 0">
+                  {{item.failTestCountPercent}}
+                </span>
+                  </ng-template>
+                </data-table-column>
+                <!--<data-table-column-->
+                <!--[property]="'status'"-->
+                <!--[header]="'Status'">-->
+                <!--</data-table-column>-->
+              </data-table>
+            </div>
+            <ng-template #noDataFoundForTable>
+              <h2 class="left-align-dashboard">
+                NO DATA AVAILABLE
+              </h2>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Defect">
+      <app-defect-info *ngIf="tabGroup.selectedIndex === 1"></app-defect-info>
+    </mat-tab>
+</mat-tab-group>

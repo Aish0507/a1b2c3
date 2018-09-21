@@ -1,0 +1,164 @@
+<div *ngIf = "scheduleBuildObj.isAddMoreActive" fxLayout="row wrap" class="change-font-family">
+  <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="start" >
+    <h1>
+      TestCases
+    </h1>
+  </div>
+  <main class="container ml-0" *ngIf="tcList.length > 0;else noDataFound" [ngStyle] = "{'font-size': '17px'}">
+    <div class="my-3 p-3 rounded box-shadow">
+      <h6 class="border-bottom border-gray pb-2 mb-0">
+        <mat-checkbox
+          name="checkall"
+          [(ngModel)]= "selectedAll"
+          (change)="selectAll();"
+        >
+          Select all
+        </mat-checkbox>
+      </h6>
+      <div class="media text-muted " *ngFor="let tcs of tcList;let i = index">
+        <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <mat-checkbox
+              name = "tc"
+              class="checkbox"
+              [value] = "tcs.testcaseName"
+              [(ngModel)] = "tcs.status"
+              (click) = "selectTestcases(tcs, tcs.status)"
+              (change)="checkIfAllSelected();">
+              <span class="lh-100">
+                <strong class="text-gray-dark">{{tcs.testcaseName}}</strong>
+                <span class="d-block large">{{tcs.testcaseDescription}}</span>
+              </span>
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <ng-template #noDataFound>
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="start" >
+      <h3>
+        No data found
+      </h3>
+    </div>
+  </ng-template>
+  <div fxFlex.gt-sm="98" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="end" >
+      <button mat-raised-button color="primary"
+      [disabled]="!deleteArrayObj.length > 0"
+      (click)="jobDetails(scheduleBuildObj)">Add More</button>
+  </div>
+</div>
+<div fxLayout="row wrap" class="change-font-family" *ngIf="jobDetailList.length > 0">
+  <div *ngIf="isTrue" fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex  >
+    <h2>Project Details</h2>
+    <ngx-datatable
+      class="material"
+      [rows]="jobDetailList"
+      [columnMode]="'force'"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="'auto'"
+      [limit]="10">
+      <ngx-datatable-column name="No#">
+          <ng-template let-column="column" ngx-datatable-header-template>
+            Serial No
+          </ng-template>
+          <ng-template let-rowIndex="rowIndex"  ngx-datatable-cell-template>
+            {{rowIndex + 1 }}
+          </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="ProjectName">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            {{row.selectedProValue.projectName}}
+          </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="BU">
+          <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+            <span (click)="sort()">
+              BU
+            </span>
+          </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            {{row.selectedAppValue.bu.buName}}
+          </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Application Name">
+          <ng-template let-column="column" ngx-datatable-header-template>
+              Application Name
+          </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+           {{row.selectedAppValue.applicationName}}
+          </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Application Type">
+        <ng-template let-column="column" ngx-datatable-header-template>
+          Application Type
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          {{row.selectedAppValue.applicationType}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="testcases">
+          <ng-template let-column="column" ngx-datatable-header-template>
+              TestCases
+          </ng-template>
+          <ng-template let-rowIndex="rowIndex" let-row="row" let-value="value" ngx-datatable-cell-template>
+              <!-- <ng-template style="" #inTcList >Another Text.</ng-template> -->
+              <!-- {{jobDetailList | json}} -->
+            <div *ngIf="jobDetailList" appToolTip [toolTipValue]="jobDetailList[rowIndex].data" data-placement="auto">
+              Selected test case - {{jobDetailList[rowIndex].data.length}}</div>
+            <!--<div class="tooltip bs-tooltip-top" role="tooltip">-->
+              <!--<div class="arrow"></div>-->
+              <!--<div class="tooltip-inner">-->
+                <!--<ul #data>-->
+                  <!--<li *ngFor = "let tcL of jobDetailList[rowIndex].data;let i = index">-->
+                    <!--{{jobDetailList[rowIndex].data[i].testcaseName}}-->
+                  <!--</li>-->
+                <!--</ul>-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<span matTooltip=''> {{jobDetailList[rowIndex].data.length}}-->
+              <!--&lt;!&ndash; {{jobDetailList[rowIndex].data[rowIndex].testcaseName}} &ndash;&gt;-->
+            <!--</span>-->
+            <!-- <div class="tooltip">{{jobDetailList[rowIndex].data.length}}
+                <span class="tooltiptext">
+                    <ul>
+                        <li *ngFor = "let tcL of jobDetailList[rowIndex].data;let i = index">
+                            {{jobDetailList[rowIndex].data[i].testcaseName}}
+                        </li>
+                      </ul>
+                </span>
+            </div> -->
+
+            <!-- <button mat-raised-button
+                  matTooltip={{jobDetailList[rowIndex].data[rowIndex].testcaseName}}
+                  [matTooltipPosition]="position.value"
+                  aria-label="Button that displays a tooltip in various positions">
+                  {{jobDetailList[rowIndex].data.length}}
+            </button> -->
+          </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="action">
+          <ng-template let-column="column" ngx-datatable-header-template>
+              Action
+          </ng-template>
+          <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+           <a (click)="deleteJobDetails(rowIndex)"><img class="icon"src="/assets/images/delete.png"></a>
+          </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+    <div  fxLayout="row wrap">
+      <div fxFlex.gt-sm="96" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="end" >
+          <button mat-raised-button
+                  (click)="openBuildDialog()"
+                  color="primary"
+                  style="margin-right: 8px">Run Now</button>
+          <button mat-raised-button (click)="openDialog()" color="">Schedule</button>
+      </div>
+      <!-- <div *ngIf="isSelectedDateTime" fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="start" >
+          You have Scheduled the Build date {{scheduleBuildObj?.dateInfo?.date | date:'fullDate'}} at {{scheduleBuildObj?.dateInfo?.time }}
+        </div> -->
+    </div>
+  </div>
+</div>

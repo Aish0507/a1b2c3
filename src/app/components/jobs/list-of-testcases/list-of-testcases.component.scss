@@ -1,0 +1,46 @@
+
+ .btn {
+    position: absolute;
+    top:5px;
+    bottom: 5px;
+    right: 15px;
+  }
+  .mat-elevation-z8{
+    margin: 10px;
+  }
+ .mat-form-field-infix {
+  display: none !important;
+ }
+ .container-fluid{
+  border-style: solid;
+  border-color: lightgray;
+  border-width: 1px 0px 0px 0px;
+ }
+ .icon{
+  width: 20px;
+  height: 20px;
+}
+.mat-checkbox {
+  padding: 5px 10px 10px 10px !important;
+}
+.mat-icon{
+  cursor: pointer;
+}
+
+/* ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color:#00a4e4 !important;
+}
+
+::ng-deep .mat-ripple-element {
+  background:#00a4e4 !important;
+} */
+
+ .lh-100 { line-height: 1; }
+ .lh-125 { line-height: 1.25; }
+ .lh-150 { line-height: 1.5; }
+ .mat-checkbox-layout .mat-checkbox-label {
+   font-size: 17px !important;
+ }
+ .change-font-family {
+   font: 80 15px/18px Roboto, "Helvetica Neue", sans-serif !important;
+ }

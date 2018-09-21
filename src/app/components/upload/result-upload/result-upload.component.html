@@ -1,0 +1,87 @@
+<!--<mat-toolbar color="primary">-->
+<!--<mat-toolbar-row></mat-toolbar-row>-->
+<!--<mat-toolbar-row></mat-toolbar-row>-->
+<!--</mat-toolbar>-->
+
+<div fxLayout="row wrap" fxLayoutAlign="center start">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card class="">
+      <mat-card-title>Upload Test Case Result File</mat-card-title>
+      <mat-card-content>
+        <div fxLayout="" fxLayoutAlign="start">
+          <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100"  class="pr-2" style="margin-top: 0%;">
+            <mat-form-field>
+              <mat-select placeholder="Select Project"
+                          [(ngModel)]="projectId"
+                          name="projectId"
+                          (change) = "fetchBuData($event)">
+                <mat-option *ngFor="let project of projectList?.projects"
+                            [value]="project?.projectId">
+                  {{project?.projectName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100"  class="pr-2" style="margin-top: 0%;">
+            <mat-form-field>
+              <mat-select placeholder="Select BU"
+                          [(ngModel)]="buId"
+                          name="bu"
+                          (change) = "fetchAppData($event)"
+                          [disabled] = "isBuEnable">
+                <mat-option *ngFor="let bu of buDataSet"
+                            [value]="bu?.buId">
+                  {{bu.buName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100"  class="pr-2" style="margin-top: 0%;">
+              <mat-form-field>
+                <mat-select placeholder="Select Env"
+                            [(ngModel)]="targetEnvId"
+                            name="env">
+                  <mat-option *ngFor="let env of targetEnvList"
+                              [value]="env?.targetEnvId">
+                     {{env?.targetEnvName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+        </div>
+        <!--<div fxLayout="row wrap" fxLayoutAlign="start">-->
+        <!--<div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100"  class="pr-2" style="margin-top: 0%;">-->
+        <!--<mat-form-field>-->
+        <!--<mat-select placeholder="Application Type"-->
+        <!--name="application"-->
+        <!--[(ngModel)] = "appType"-->
+        <!--(ngModelChange)="onChangeObj($event)">-->
+        <!--<mat-option  [value]="'all'">All</mat-option>-->
+        <!--<mat-option *ngFor="let type of aplicationType"-->
+        <!--[value]="type.value">-->
+        <!--{{type.name}}-->
+        <!--</mat-option>-->
+        <!--</mat-select>-->
+        <!--</mat-form-field>-->
+        <!--</div>-->
+        <!--</div>-->
+        <div fxLayout="row wrap" fxLayoutAlign="start">
+          <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100"  class="pr-2" style="margin-top: 2%;">
+            <input type="file" ng2FileSelect #uploadTCResult [uploader]="uploader" />
+            <div class="clearfix mb-1"></div>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start">
+          <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100">
+            <h4 class="mt-0"  fxLayout="row">
+            </h4>
+            <button mat-raised-button mat-button-sm color="primary" type="button"
+                    (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
+            <button mat-raised-button mat-button-sm color="primary" type="button"
+                    (click)="clearUploadTCResultQueue()" [disabled]="!uploader.queue.length">Clear</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

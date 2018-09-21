@@ -1,0 +1,15 @@
+// Default Theme
+@include angular-material-theme($theme);
+
+// Dark Theme
+.app-dark {
+  @include angular-material-theme($dark-theme);
+}
+.mat-toolbar.mat-primary {
+  background: #00a4e4 !important;
+}
+
+
+
+
+

@@ -1,0 +1,97 @@
+<mat-form-field style="width: 100%" class="mb-1">
+    <input matInput placeholder="Type to filter by Lan ID "  (keyup)='updateFilter($event)'>
+  </mat-form-field>
+  <!-- <div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="end" >
+      <button mat-mini-fab color="primary" routerLink="/add-user-ac">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div> -->
+ 
+  <ngx-datatable
+    class="material"
+    [rows]="allUserList"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    [limit]="10">
+    <ngx-datatable-column name="No#"  [width]="10">
+      <ng-template let-column="column"  ngx-datatable-header-template>
+        No#
+      </ng-template>
+      <ng-template let-rowIndex="rowIndex"  ngx-datatable-cell-template>
+        {{rowIndex + 1 }}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Lan ID"  [width]="50">
+        <ng-template let-column="column" ngx-datatable-header-template>
+        Lan ID
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          {{row.lanId}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="First Name"  [width]="50">
+      <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+        <span (click)="sort()">
+        First Name
+        </span>
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{row.firstName}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Last Name"  [width]="50">
+      <ng-template let-column="column" ngx-datatable-header-template>
+        Last Name
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+       {{row.lastName}}
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Email Id"  [width]="140">
+        <ng-template let-column="column" ngx-datatable-header-template>
+            Email Id
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+         {{row.emailId}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Role Type"  [width]="30">
+        <ng-template let-column="column" ngx-datatable-header-template>
+            Role Type
+        </ng-template>
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+         {{row.role?.roleType}}
+        </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Status"  [width]="50">
+      <ng-template let-column="column" ngx-datatable-header-template>
+          Status
+      </ng-template>
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+       {{row.status}}
+      </ng-template>
+  </ngx-datatable-column>
+
+    <ngx-datatable-column name="Action"  [width]="30">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <!--<button mat-raised-button color="primary" (click)="viewUserInfo(row)">-->
+            <!--View-->
+        <!--</button>-->
+        <!-- <a><mat-icon (click)="gotToViewPage(row)">edit</mat-icon></a> -->
+        <a (click)="gotToViewPage(row)"><img class="icon" src="/assets/images/edit.png"></a>
+        <a *ngIf="row.status !== 'INACTIVE'" 
+            (click)="deleteUser(row)"><img class="icon"src="/assets/images/delete.png"></a>
+        <!-- <a *ngIf="row.status !== 'INACTIVE'"><mat-icon (click)="deleteUser(row)">delete</mat-icon></a> -->
+        <!-- <button mat-raised-button color="primary" (click)="gotToViewPage(row)">
+          View
+        </button>
+        <button mat-raised-button color="" (click)="deleteUser(row)">
+          Delete
+        </button> -->
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>

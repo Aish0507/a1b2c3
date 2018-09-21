@@ -1,0 +1,65 @@
+<h1 mat-dialog-title>Select Date and Time</h1>
+    <div mat-dialog-content>
+        <form [formGroup]="form">
+            <mat-form-field>
+                <input formControlName="buildName" matInput 
+                placeholder="Provide Build Name"
+                name="scheduleBuildName"
+                [(ngModel)] = "scheduleBuildName"
+                (ngModelChange)="updateBuildName($event)"
+                #elementToFocus>
+                <mat-error>{{getInputErrorMessage('buildName')}}</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select placeholder="Select Env"
+                            [(ngModel)]="scheduleBuildObj.selectedEnvValue"
+                            name="env"
+                            (change)="fetchEnvData($event)"
+                            formControlName="env">
+                    <mat-option *ngFor="let env of jobs?.environment"
+                                [value]="env?.targetEnvId" >
+                    {{env.targetEnvName}}
+                    </mat-option>
+                </mat-select>
+                <mat-error>{{getInputErrorMessage('env')}}</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput 
+                    [min]="minDate"
+                    [matDatepicker]="picker"
+                    placeholder="Choose a date"
+                    [(ngModel)]="scheduleBuildObjDate"
+                    name="scheduleBuildObjDate"
+                    (ngModelChange)="updateDate($event)"
+                    (focus)="_openCalendar(picker)"
+                    formControlName="date"
+                        #elementToFocus>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker="matDatepicker" (closed)="_closeCalendar($event)"></mat-datepicker>
+                <mat-error>{{getInputErrorMessage('date')}}</mat-error>
+            </mat-form-field>
+            <div class="row">
+                <input type="time" style="margin-left: 13px;width: 10vw"
+                        name="scheduleBuildObjTime"
+                        (ngModelChange)="updateTime($event)"
+                        [(ngModel)] = "scheduleBuildObjTime"
+                        formControlName="time"
+                            #elementToFocus>
+                <mat-error>{{getInputErrorMessage('time')}}</mat-error>
+                <i   (click)="open()">
+                        <img style="margin-left: 20px" class="icon"src="/assets/images/schedule.png">
+                </i>
+                
+            </div>    
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <!-- <button mat-button (click)="onNoClick()">No Thanks</button> -->
+        <button mat-button [mat-dialog-close]="scheduleBuildObj"
+        cdkFocusInitial
+        [disabled]="!form.valid">Ok</button>
+      <button
+        mat-button
+        (click)="onNoClick()"
+      >Close</button>
+    </div>

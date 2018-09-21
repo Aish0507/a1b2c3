@@ -1,0 +1,68 @@
+<mat-form-field style="width: 100%" class="mb-1">
+  <input matInput placeholder="Type to filter by application name"  (keyup)='updateFilter($event)'>
+</mat-form-field>
+<div fxLayout="row wrap">
+  <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="end" >
+    <a (click)="openAddDialog()">
+      <!-- <mat-icon>add</mat-icon> -->
+      <img src="/assets/images/add.png">
+    </a>
+  </div>
+</div>
+<ngx-datatable
+  class="material"
+  [rows]="AplicationList"
+  [columnMode]="'force'"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="'auto'"
+  [limit]="10">
+  <ngx-datatable-column name="No#">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      No#
+    </ng-template>
+    <ng-template let-rowIndex="rowIndex"  ngx-datatable-cell-template>
+      {{rowIndex + 1 }}
+    </ng-template>
+  </ngx-datatable-column>
+  <!-- <ngx-datatable-column name="Global App Id">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      1234
+    </ng-template>
+  </ngx-datatable-column> -->
+  <ngx-datatable-column name="Application Name">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      {{row.application.applicationName}}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="BU Name">
+    <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+      <span (click)="sort()">
+        BU Name
+      </span>
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      {{row.bu.buName}}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Project Name">
+    <ng-template let-column="column" ngx-datatable-header-template>
+      Project Name
+    </ng-template>
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+     {{row.project.projectName}}
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Type">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+     {{row.application.applicationType}}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="Action">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <!--<i class="fa fa-edit" (click)="openUpdateDialog(row)"></i>-->
+      <a (click)="openUpdateDialog(row)"><img class="icon"src="/assets/images/edit.png"></a>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>

@@ -1,0 +1,13 @@
+<!--<h2 mat-dialog-title>{{data.title}}</h2>-->
+<mat-dialog-content>
+  <p>
+    {{data.body}}
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    style="margin: 10px;"
+    mat-raised-button
+    color="primary"
+    mat-dialog-close (click)="onNoClick()">Close</button>
+</mat-dialog-actions>

@@ -1,0 +1,246 @@
+<div class="jumbotron jumbotron-fluid jumbotron-custom">
+  <div fxLayout="row wrap">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="50" fxLayoutAlign="first">
+      <h2 class="left-align-dashboard">
+        Project Level Status
+      </h2>
+      <!--<span class="text-muted pt-2">-->
+        <!--&nbsp;({{this.objChartFilter.startDate | date}} to {{objChartFilter.endDate | date}})-->
+      <!--</span>-->
+    </div>
+
+    <ng-container>
+      <ng-container >
+        <div fxFlex.gt-sm="50" fxFlex.gt-xs="50"
+             fxFlex="100%">
+          <mat-card>
+            <mat-card-title>MFAAS/Severity
+            </mat-card-title>
+            <mat-card-content>
+              <canvas
+                height="100"
+                baseChart
+                class="chart"
+                #doughnutChart="base-chart"
+                [data]="[chartData?.severity.urgentSeverityLevelCount,
+                        chartData?.severity.criticalSeverityLevelCount,
+                        chartData?.severity.highSeverityLevelCount,
+                        chartData?.severity.mediumSeverityLevelCount,
+                        chartData?.severity.lowSeverityLevelCount]"
+                [options]="doughnutOptions"
+                [colors]="doughnutChartColors"
+                [labels]="['1-Urgent',
+                          '2-Critical',
+                          '3-High',
+                          '4-Medium',
+                          '5-Low']"
+                [chartType]="doughnutChartType"></canvas>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div fxFlex.gt-sm="50" fxFlex.gt-xs="50"
+             fxFlex="100%">
+          <mat-card>
+            <mat-card-title>MFAAS/Priority
+            </mat-card-title>
+            <mat-card-content>
+              <canvas
+                height="100"
+                baseChart
+                class="chart"
+                #doughnutChart="base-chart"
+                [data]="[chartData?.priority.urgentPriorityLevelCount,
+                        chartData?.priority.highPriorityLevelCount,
+                        chartData?.priority.mediumPriorityLevelCount,
+                        chartData?.priority.lowPriorityLevelCount]"
+                [options]="doughnutOptions"
+                [colors]="doughnutChartColorsPriority"
+                [labels]="['1-Urgent',
+                          '2-High',
+                          '3-Medium',
+                          '4-Low']"
+                [chartType]="doughnutChartType"></canvas>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <!-- Filter code -->
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="50" fxLayoutAlign="end" (click)="activeFilter()">
+          <img class="icon"src="/assets/images/filter.png">
+        </div>
+        <ng-container *ngIf="isChartFilterActive">
+          <div fxFlex.gt-sm="15%" fxFlex.gt-xs="50" fxFlex="100">
+          </div>
+          <div fxFlex.gt-sm="33%" fxFlex.gt-xs="50" fxFlex="100">
+            <mat-card>
+              <mat-card-title-group>
+                <mat-card-title>Select Project</mat-card-title>
+              </mat-card-title-group>
+              <mat-card-content>
+                <mat-form-field class="input-full-width">
+                  <mat-select name="projects"
+                              [formControl]="projectFilter">
+                    <mat-option *ngFor="let project of tempProjectData?.projects"
+                                [value]="project.projectId">
+                      {{project?.projectName}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="33%" fxFlex.gt-xs="50" fxFlex="100">
+            <mat-card>
+              <mat-card-title-group>
+                <mat-card-title>Select Date</mat-card-title>
+              </mat-card-title-group>
+              <mat-card-content>
+                <div fxLayout="row wrap">
+                  <div fxFlex.gt-sm="50"
+                        fxFlex.gt-xs="50"
+                        fxFlex="100"
+                        fxLayoutAlign="left">
+                    <mat-form-field style="width: 55%">
+                      <input matInput
+                              [matDatepicker]="startDatePicker"
+                              placeholder="Choose start date"
+                              [(ngModel)]="startDateFilter"
+                              (focus)="_openCalendarChartStartDate(startDatePicker)"
+                              (ngModelChange)="changeStartDate()"
+                              #_inputStart
+                      >
+                      <mat-datepicker-toggle matSuffix [for]="startDatePicker">
+                      </mat-datepicker-toggle>
+                      <mat-datepicker #startDatePicker="matDatepicker" ></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex.gt-sm="50"
+                        fxFlex.gt-xs="50"
+                        fxFlex="100"
+                        fxLayoutAlign="right">
+                    <mat-form-field style="width: 55%">
+                      <input matInput
+                              [matDatepicker]="endDatePicker"
+                              placeholder="Choose end date"
+                              [min]="startDateFilter"
+                              [(ngModel)]="endDateFilter"
+                              (focus)="_openCalendarChartEndDate(endDatePicker)"
+                              (ngModelChange)="changeEndDate()"
+                              #_inputEnd>
+                      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #endDatePicker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+            <div fxLayout="row" fxLayoutAlign="center">
+              <div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="50" fxFlex="100">
+              </div> &nbsp;
+              <div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="50" fxFlex="100">
+                <button mat-raised-button color="primary" (click)="applyFilter()" >Apply</button>
+                <button mat-raised-button color="primary"
+                      (click)="resetFilterValue()">Clear</button>
+                <button mat-raised-button color="primary"
+                      (click)="activeFilter()">Cancel</button>
+              </div> &nbsp;
+              <div fxFlex.gt-sm="33.33%" fxFlex.gt-xs="50" fxFlex="100">
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div fxFlex.gt-sm="100" fxFlex.gt-xs="50"
+             fxFlex="100%">
+          <!--<mat-card style="display: none;" >-->
+            <!--<mat-card-title>Line</mat-card-title>-->
+            <!--<mat-card-subtitle>Basic</mat-card-subtitle>-->
+            <!--<mat-card-content>-->
+              <!--<canvas height="65" baseChart class="chart"-->
+                      <!--[datasets]="lineChartData"-->
+                      <!--[labels]="lineChartLabels"-->
+                      <!--[options]="lineChartOptions"-->
+                      <!--[colors]="lineChartColors"-->
+                      <!--[legend]="lineChartLegend"-->
+                      <!--[chartType]="lineChartType"></canvas>-->
+            <!--</mat-card-content>-->
+          <!--</mat-card>-->
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div class="mt-3" style="width: 100%">
+    <div *ngIf="defectResultSet?.length > 0;else noDataFoundForTable">
+      <data-table id="data-grid"
+                  headerTitle="Defects"
+                  [items]="defectResultSet"
+                  [itemCount]="tECount"
+                  (reload)="reloadDefectData($event)"
+                  [limit]="4"
+                  [sortBy]=""
+                  [sortAsc]="false"
+                  [selectColumn]="false"
+                  [multiSelect]="false"
+                  [substituteRows]="false"
+                  [expandableRows]="false"
+                  [translations]="translations"
+                  [selectOnRowClick]="false"
+                  [indexColumn]="false"
+      >
+        <ng-template #dataTableExpand let-item="item">
+          <div [textContent]="item.description" style="padding: 5px; color: gray"></div>
+        </ng-template>
+        <data-table-column
+          [property]="'defectName'"
+          [header]="'Name'"
+          [sortable]="true">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectDescription'"
+          [header]="'Description'"
+          [sortable]="false">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectStatus'"
+          [header]="'Status'"
+          [sortable]="true">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectPriority'"
+          [header]="'Priority'"
+          [sortable]="true">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectSeverityLevel'"
+          [header]="'Severity'"
+          [sortable]="true">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectOwner'"
+          [header]="'Owner'"
+          [sortable]="true">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectDetectedBy'"
+          [header]="'Detected By'"
+          [sortable]="true">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectEnvironment'"
+          [header]="'Environment'"
+          [sortable]="true">
+        </data-table-column>
+        <data-table-column
+          [property]="'defectCreationTime'"
+          [header]="'Creation Time'"
+          [sortable]="true">
+        </data-table-column>
+      </data-table>
+    </div>
+    <ng-template #noDataFoundForTable>
+      <h2 class="left-align-dashboard">
+        No Data Found
+      </h2>
+    </ng-template>
+  </div>
+</div>

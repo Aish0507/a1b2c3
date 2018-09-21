@@ -1,0 +1,30 @@
+.mat-elevation-z8{
+  margin: 10px;
+}
+/* mat-accordion : {
+  border: 1px solid grey;
+} */
+mat-icon {
+  margin-left: auto;
+}
+.example-margin {
+  margin: 0 10px;
+}
+:host ::ng-deep .datatable-header-cell {
+  padding: 10px !important;
+}
+:host ::ng-deep .datatable-body-cell {
+  padding: 10px !important;
+} 
+button {
+  width: 10%;
+}
+.lh-100 { line-height: 1; }
+.lh-125 { line-height: 1.25; }
+.lh-150 { line-height: 1.5; }
+.icon1 {
+  margin-left: auto;
+  width:22px ;
+  height:22px ;
+  cursor: pointer;
+}

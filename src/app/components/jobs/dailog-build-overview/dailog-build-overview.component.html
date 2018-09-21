@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>Select Build and Env</h1>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field>
+        <input formControlName="buildName" matInput
+        placeholder="Provide Build Name"
+        name="scheduleBuildName"
+        [(ngModel)] = "scheduleBuildName"
+        (ngModelChange)="updateBuildName($event)"
+        #elementToFocus>
+        <mat-error>{{getInputErrorMessage('buildName')}}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select placeholder="Select Env"
+                  [(ngModel)]="scheduleBuildObj.selectedEnvValue"
+                  name="env"
+                  (change)="fetchEnvData($event)"
+                  formControlName="env">
+        <mat-option *ngFor="let env of jobs?.environment"
+                      [value]="env?.targetEnvId" >
+          {{env.targetEnvName}}
+        </mat-option>
+      </mat-select>
+      <mat-error>{{getInputErrorMessage('env')}}</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="scheduleBuildObj"
+  cdkFocusInitial
+  [disabled]="!form.valid">Ok</button>
+  <button
+    mat-button
+    (click)="onNoClick()"
+  >Cancel</button>
+</div>

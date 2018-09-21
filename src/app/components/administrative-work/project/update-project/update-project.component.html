@@ -1,0 +1,63 @@
+<form [formGroup]="projectForm">
+<div align="center" class="example-container col-lg-12">
+  <div class="col-lg-12">
+      <!-- <mat-form-field [hidden]="true">
+          <input matInput 
+           id="projectId"
+           placeholder="Project ID"
+           [(ngModel)]="projectObj.projectId"
+           [disabled]="true"
+           name="projectId" 
+           value={{data.projectobj.projectId}}
+           >
+      </mat-form-field> -->
+      <mat-form-field>
+          <input matInput 
+           id="projectName"
+           placeholder="Project Name"
+           [(ngModel)]="projectObj.projectName"
+           name="projectName" 
+           formControlName="projectName">
+      </mat-form-field>
+  </div>
+  <!-- <div class="col-lg-12">
+      <mat-form-field>
+          <textarea matInput 
+           id="projectDetails"
+           placeholder="Project Details"
+           [(ngModel)]="projectObj.projectDetails"
+           name="projectDetails" value={{data.projectobj.projectDetails}}></textarea>
+      </mat-form-field>
+  </div> -->
+  <div class="col-lg-12">
+        <mat-form-field>
+            <input matInput 
+             id="projectDetails"
+             placeholder="Project Details"
+             [(ngModel)]="projectObj.projectDetails"
+             name="projectDetails" 
+             formControlName="projectDetails">
+             <mat-error>{{getInputErrorMessage('projectDetails')}}</mat-error>
+        </mat-form-field>
+    </div>
+    <!-- <div class="col-lg-12">
+        <mat-form-field>
+            <mat-select placeholder="Select Status"
+                        name="status"
+                        [(ngModel)]="projectObj.projectStatus"
+                        formControlName="status">
+                <mat-option value="Active">Active</mat-option>
+                <mat-option value="Inactive">Inactive</mat-option>
+            </mat-select>
+            <mat-error>{{getInputErrorMessage('status')}}</mat-error>
+            </mat-form-field>
+    </div> -->
+  <div class="col-lg-12" color="primary">
+      <button mat-raised-button color="primary"
+       (click)="updateProject(projectObj)" 
+       [disabled]="!projectForm.valid">Update Project</button>
+       <button mat-raised-button (click)="closeDialog()"
+          >Cancel</button>
+  </div>
+</div>
+</form>

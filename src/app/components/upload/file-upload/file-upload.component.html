@@ -1,0 +1,90 @@
+<!--<mat-toolbar color="primary">-->
+  <!--<mat-toolbar-row></mat-toolbar-row>-->
+  <!--<mat-toolbar-row></mat-toolbar-row>-->
+<!--</mat-toolbar>-->
+
+<div fxLayout="row wrap" fxLayoutAlign="center start">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card class="">
+      <mat-card-title>Upload Excel</mat-card-title>
+      <!--<mat-card-subtitle>Map application with testcase file</mat-card-subtitle>-->
+      <mat-card-content>
+        <div fxLayout="" fxLayoutAlign="start">
+          <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100" style="margin-top: 0%;">
+            <mat-form-field>
+              <mat-select placeholder="Application Type"
+                          name="application" [(ngModel)] = "appType" (ngModelChange)="onChangeObj($event)">
+                <!-- <mat-option  [value]="'all'">All</mat-option> -->
+                <mat-option *ngFor="let type of aplicationType"
+                            [value]="type.value">
+                  {{type.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+              <div *ngIf="appType=='UFT'; else elseBlock">
+                  <mat-form-field>
+                      <mat-select placeholder="Select Application"
+                                  name="application"
+                                  [disabled]="!appType"
+                                  [(ngModel)] = "appId"
+                                  >
+                        <ngx-mat-select-search [formControl]="selectedAppFilterCtrl"
+                                               placeholderLabel  = "Search"
+                                               noEntriesFoundLabel  = "No data found"></ngx-mat-select-search>
+                        <mat-option *ngFor="let application of filteredApp | async"
+                                    [value]="application.applicationId">
+                          {{application.applicationName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+              </div>
+              <ng-template #elseBlock>
+                  <mat-form-field>
+                      <mat-select placeholder="Select Application"
+                                  name="application"
+                                  [disabled]="!appType"
+                                  [(ngModel)] = "appId"
+                                  multiple>
+                        <ngx-mat-select-search [formControl]="selectedAppFilterCtrl"
+                                               placeholderLabel  = "Search"
+                                               noEntriesFoundLabel  = "No data found"></ngx-mat-select-search>
+                        <mat-option *ngFor="let application of filteredApp | async"
+                                    [value]="application.applicationId">
+                          {{application.applicationName}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+              </ng-template>
+          </div>
+          <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100"  class="pr-2" style="margin-top: 2%;">
+            <!--<h4 class="mt-0">Drop files</h4>-->
+            <!--<div ng2FileDrop-->
+                 <!--[ngClass]="{'nv-file-over': hasBaseDropZoneOver}"-->
+                 <!--(fileOver)="fileOverBase($event)"-->
+                 <!--[uploader]="uploader" class="my-drop-zone mb-1">Drop file here</div>-->
+            <input type="file" ng2FileSelect #uploadTC [uploader]="uploader" />
+            <div class="clearfix mb-1"></div>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start">
+          <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100">
+              <h4 class="mt-0"  fxLayout="row">
+                <!--<span fxFlex>Upload queue</span>-->
+                <!--<span>File length: {{ uploader?.queue?.length }}</span>-->
+              </h4>
+              <button mat-raised-button mat-button-sm color="primary" type="button"
+                      (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">Upload</button>
+              <button mat-raised-button mat-button-sm color="primary" type="button"
+                      (click)="clearUploadTCQueue()" [disabled]="!uploader.queue.length">Clear</button>
+            </div>
+        </div>
+      </mat-card-content>
+      <!--<mat-card-actions>-->
+        <!--<button mat-raised-button class="shadow-none">Save</button>-->
+        <!--<button mat-raised-button color="primary">Cancel</button>-->
+      <!--</mat-card-actions>-->
+    </mat-card>
+  </div>
+</div>

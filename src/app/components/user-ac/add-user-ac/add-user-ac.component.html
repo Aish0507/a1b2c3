@@ -1,0 +1,164 @@
+<!--<mat-toolbar color="primary">-->
+  <!--<mat-toolbar-row></mat-toolbar-row>-->
+  <!--<mat-toolbar-row></mat-toolbar-row>-->
+<!--</mat-toolbar>-->
+<div fxLayout="row wrap" fxLayoutAlign="center start">
+  <div fxFlex.gt-sm="100" fxFlex="100">
+    <mat-card class="">
+      <mat-card-content>
+        <form [formGroup]="userForm">
+          <div fxLayout="row wrap">
+              <mat-form-field
+              fxFlex.gt-sm="50"
+              fxFlex="100"
+              class="input-full-width">
+                <mat-select 
+                formControlName="domain"
+                [(ngModel)]="newUserObj.domain">
+                    <mat-option *ngFor="let dom of domain" [value]="dom.value">
+                        {{ dom.value }}
+                    </mat-option>
+                </mat-select>
+                <mat-error>{{getInputErrorMessage('domain')}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap">
+            <mat-form-field
+              fxFlex.gt-sm="50"
+              fxFlex="100"
+              class="input-full-width">
+              <input
+                matInput class="form-control"
+                placeholder="Lan ID"
+                aria-label="Lan ID"
+                aria-describedby="basic-addon2"
+                [(ngModel)] = "newUserObj.lName"
+                name="lName"
+                formControlName="lName"
+                [attr.disabled]='isDisable ? isDisable : null '
+                >
+                <mat-error>{{getInputErrorMessage('lName')}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row wrap">
+            <div fxFlex.gt-sm="50" fxFlex="100"
+                 [ngStyle] = "{'padding' : '20px'}">
+              <button mat-raised-button
+                      color="primary"
+                      (click)="searchUserFromLDap()"
+                      >Confirm identity</button>
+              <!--<button mat-raised-button (click)="resetLanId()">Reset</button>-->
+            </div>
+          </div>
+          <ng-container *ngIf="isLdapApisuccess">
+            <div fxLayout="column">
+              <mat-form-field class="mb-1">
+                <input
+                  matInput id="firstName"
+                  placeholder="First Name"
+                  name="firstName"
+                  [(ngModel)] = "newUserObj.firstName"
+                  formControlName="firstName">
+                  <mat-error>{{getInputErrorMessage('firstName')}}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="mb-1">
+                <input matInput
+                       id="lastName"
+                       placeholder="Last Name"
+                       name="lastName"
+                       [(ngModel)] = "newUserObj.lastName"
+                       formControlName="lastName">
+                       <mat-error>{{getInputErrorMessage('lastName')}}</mat-error>
+              </mat-form-field>
+              <mat-form-field class="mb-1">
+                <input
+                  matInput
+                  id="emailId"
+                  placeholder="Email"
+                  name="emailId"
+                  [(ngModel)] = "newUserObj.emailId"
+                  formControlName="emailId">
+                  <mat-error>{{getInputErrorMessage('emailId')}}</mat-error>
+              </mat-form-field>
+                <mat-form-field class="mb-1">
+                  <mat-select placeholder="Select Role" [(value)]="newUserObj.selectedRole">
+                    <mat-option *ngFor="let role of userRoleList" [value]="role">
+                      {{role.roleType}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            </div>
+            <div fxLayout="row wrap" *ngIf="jobs">
+              <div *ngIf="newUserObj.selectedRole.roleType == 'USER'" fxFlex.gt-sm="50" fxFlex.gt-xs="100" fxFlex="100">
+                <mat-form-field>
+                  <mat-select placeholder="Select Project"
+                              [(ngModel)]="newUserObj.selectedProValue"
+                              name="projects"
+                              (change) = "fetchBuData($event)"
+                              formControlName="project">
+                    <mat-option *ngFor="let project of jobs?.projects"
+                                [value]="project?.projectId">
+                      {{project?.projectName}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{getInputErrorMessage('project')}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div *ngIf="newUserObj.selectedRole.roleType == 'USER'" fxFlex.gt-sm="50" fxFlex.gt-xs="100" fxFlex="100">
+                <mat-form-field class="mb-1">
+                  <mat-select placeholder="Select BU"
+                              [(ngModel)]="newUserObj.selectedBuValue"
+                              name="bu"
+                              (change) = "fetchAppData($event)"
+                              formControlName="bu">
+                    <mat-option *ngFor="let bu of buDataSet"
+                                [value]="bu?.buId">
+                      {{bu.buName}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{getInputErrorMessage('bu')}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div *ngIf="newUserObj.selectedRole.roleType == 'USER'" fxLayout="column">
+              <mat-checkbox
+                name="checkall"
+                *ngIf="applicationDataSet"
+                [(ngModel)]= "selectedAll"
+                (change)="selectAll();"
+                formControlName="selectedAll">
+                Select all
+              </mat-checkbox>
+              <hr>
+              <mat-checkbox
+                *ngFor="let app of applicationDataSet; let i = index"
+                name="status"
+                [(ngModel)]= "app.status"
+                (click)="selectSingleVal(app, app.status)"
+                (change)="checkIfAllSelected();"
+                formControlName="status">
+                {{app.applicationName}}
+              </mat-checkbox>
+            </div>
+          </ng-container>
+        </form>
+      </mat-card-content>
+      <hr> 
+      <mat-card-actions fxLayoutAlign="end">
+        <button *ngIf="isLdapApisuccess && newUserObj.selectedRole.roleType == 'USER'" 
+                mat-raised-button class="shadow-none"
+                (click)="addNewUser(newUserObj)"
+                [disabled]="!userForm.valid "
+                >Save</button>
+        <button *ngIf="isLdapApisuccess && newUserObj.selectedRole.roleType == 'ADMIN'" 
+                mat-raised-button
+                class="shadow-none"
+                (click)="addNewUser(newUserObj)"
+                >Save</button>
+        <button mat-raised-button (click)="resetLanId()">Reset</button>
+        <button mat-raised-button color="primary" (click)="goBack('dashboard/ua/user-list')">Cancel</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

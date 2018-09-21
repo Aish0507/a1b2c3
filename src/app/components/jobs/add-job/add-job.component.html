@@ -1,0 +1,170 @@
+<!--<div fxLayout="row wrap">-->
+    <!--<div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="start" >-->
+        <!--<h2>-->
+          <!--Add Jobs-->
+        <!--</h2>-->
+      <!--</div>-->
+  <!--<div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="100">-->
+    <!--<div class="form-group">-->
+      <!--&lt;!&ndash;<label for="selectDomain">Select Domain</label>&ndash;&gt;-->
+
+    <!--</div>-->
+      <!--<mat-form-field>-->
+          <!--<mat-select placeholder="Select Project"-->
+                      <!--[(ngModel)]="scheduleBuildObj.selectedProValue"-->
+                      <!--name="projects"-->
+                      <!--(change) = "fetchBuData($event)">-->
+            <!--<mat-option *ngFor="let project of jobs?.projects"-->
+                        <!--[value]="project">-->
+              <!--{{project?.projectName}}-->
+            <!--</mat-option>-->
+          <!--</mat-select>-->
+        <!--</mat-form-field>-->
+  <!--</div>-->
+  <!--<div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="100">-->
+      <!--<mat-form-field>-->
+          <!--<mat-select placeholder="Select BU"-->
+                      <!--[(ngModel)]="scheduleBuildObj.selectedBuValue"-->
+                      <!--name="bu"-->
+                      <!--(change) = "fetchAppData($event)"-->
+                      <!--[disabled] = "isBuEnable">-->
+            <!--<mat-option *ngFor="let bu of buDataSet"-->
+                        <!--[value]="bu?.buId">-->
+              <!--{{bu.buName}}-->
+            <!--</mat-option>-->
+          <!--</mat-select>-->
+        <!--</mat-form-field>-->
+  <!--</div>-->
+  <!--<div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="100">-->
+    <!--<mat-form-field>-->
+      <!--<mat-select placeholder="Application Type"-->
+                  <!--[(ngModel)]="scheduleBuildObj.appType"-->
+                  <!--name="applicationType"-->
+                  <!--(change) = "onChangeObj($event)"-->
+                 <!--&gt;-->
+        <!--<mat-option [value]="'all'">All</mat-option>-->
+        <!--<mat-option *ngFor="let type of aplicationType"-->
+                    <!--[value]="type.value">-->
+          <!--{{type.name}}-->
+        <!--</mat-option>-->
+      <!--</mat-select>-->
+    <!--</mat-form-field>-->
+  <!--</div>-->
+  <!--<div fxFlex.gt-sm="25" fxFlex.gt-xs="50" fxFlex="100">-->
+      <!--<mat-form-field>-->
+          <!--&lt;!&ndash; <mat-select placeholder="Select Application"-->
+                      <!--[(ngModel)]="scheduleBuildObj.selectedAppValue"-->
+                      <!--name="application"-->
+                      <!--(change) = "fetchTcData($event)"-->
+                      <!--[disabled] = "isApplicationEnable">-->
+            <!--<mat-option *ngFor="let app of applicationList"-->
+                        <!--[value]="app">-->
+              <!--{{app.applicationName}}-->
+            <!--</mat-option>-->
+          <!--</mat-select> &ndash;&gt;-->
+          <!--<mat-select placeholder="Select Application"-->
+                      <!--[(ngModel)]="scheduleBuildObj.selectedAppValue"-->
+                      <!--name="application"-->
+                      <!--(change) = "fetchTcData($event)"-->
+                      <!--[disabled] = "isApplicationEnable">-->
+            <!--<ngx-mat-select-search-->
+              <!--[formControl]="selectedAppFilterCtrl"-->
+              <!--placeholderLabel  = "Search"-->
+              <!--noEntriesFoundLabel  = "No data found"></ngx-mat-select-search>-->
+            <!--<mat-option *ngFor="let app of filteredApp | async"-->
+                        <!--[value]="app">-->
+                    <!--{{app.applicationName}}-->
+            <!--</mat-option>-->
+          <!--</mat-select>-->
+        <!--</mat-form-field>-->
+  <!--</div>-->
+  <!--<div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100">-->
+      <!--<ssp-list-of-testcases-->
+      <!--*ngIf = "isTcDivEnable"-->
+      <!--[tcList] = "tc"-->
+      <!--[scheduleBuildObj]= "scheduleBuildObj"-->
+      <!--&gt;-->
+      <!--</ssp-list-of-testcases>-->
+  <!--</div>-->
+<!--</div>-->
+<div class="row change-font-family">
+    <div class="col-md-3 mb-3">
+      <label for="project-name">Select Project</label>
+      <select class="custom-select"
+              id="project-name"
+              required
+              (ngModelChange) = "fetchBuData($event)"
+              [(ngModel)]="scheduleBuildObj.selectedProValue">
+        <option [ngValue]="undefined">Select Project</option>
+        <option  *ngFor="let project of jobs?.projects"
+                 [ngValue]="project">
+          {{project?.projectName}}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label for="bu-name">Select BU</label>
+      <select class="custom-select"
+              id="bu-name"
+              required
+              [disabled] = "isBuEnable"
+              (ngModelChange) = "fetchAppData($event)"
+              [(ngModel)]="scheduleBuildObj.selectedBuValue">
+        <option [ngValue]="undefined">Select BU</option>      
+        <option  *ngFor="let bu of buDataSet"
+                 [ngValue]="bu?.buId">
+          {{bu.buName}}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label for="app-type">Select Application Type</label>
+      <select class="custom-select"
+              id="app-type"
+              required
+              (ngModelChange) = "onChangeObj($event)"
+              [(ngModel)]="scheduleBuildObj.appType"
+              [disabled] = "isBuSelected">
+        <option [ngValue]="'all'">All</option>
+        <option  *ngFor="let type of aplicationType"
+                 [ngValue]="type.value">
+          {{type.name}}
+        </option>
+      </select>
+    </div>
+    <div class="ngx-dropdown-button col-md-3 mb-3">
+      <label for="app-list">Select Application</label>
+      <ngx-select-dropdown
+        id="app-list"
+        [multiple]="false"
+        [(value)]="objectsArray"
+        [config]="config"
+        (change) = "fetchTcData($event)"
+        [options]="options"
+        ></ngx-select-dropdown>
+      <!--<mat-form-field>-->
+        <!--<mat-select placeholder="Select Application"-->
+                    <!--[(ngModel)]="scheduleBuildObj.selectedAppValue"-->
+                    <!--name="application"-->
+                    <!--(change) = "fetchTcData($event)"-->
+                    <!--[disabled] = "isApplicationEnable">-->
+          <!--<ngx-mat-select-search-->
+            <!--[formControl]="selectedAppFilterCtrl"-->
+            <!--placeholderLabel  = "Search"-->
+            <!--noEntriesFoundLabel  = "No data found"></ngx-mat-select-search>-->
+          <!--<mat-option *ngFor="let app of filteredApp | async"-->
+                      <!--[value]="app">-->
+            <!--{{app.applicationName}}-->
+          <!--</mat-option>-->
+        <!--</mat-select>-->
+      <!--</mat-form-field>-->
+    </div>
+    <div class="col-lg-12">
+      <ssp-list-of-testcases
+        *ngIf = "isTcDivEnable"
+        [tcList] = "tc"
+        [scheduleBuildObj]= "scheduleBuildObj"
+      >
+      </ssp-list-of-testcases>
+    </div>
+  </div>

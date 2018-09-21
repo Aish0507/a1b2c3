@@ -1,0 +1,14 @@
+{
+  "token": "Bearer 123.eyJ1c2VyX2lkIjoiNWFlMTg4ZDZmNGU0MzkxZjI0ZTZhYzEwIiwiaWF0IjoxNTI1MjY0NzE4LCJleHAiOjE1MjUyNzQ3MTh9.1HZBpHcFgTu1ltAYMHz0eKqRlUWYEomjat696Q7G3Sc",
+  "data": [{
+    "_id": "5ae188d6f4e4391f24e6ac10",
+    "phone": "123",
+    "email": "a@gmail.com",
+    "password": "$2a$10$hBMpHeg5DU5xZBsbmYNQfeKxN583tDiFPvY.o4AR6uwZ8vMieerwm",
+    "createdAt": "2018-04-26T08:07:50.635Z",
+    "updatedAt": "2018-04-26T08:07:50.635Z",
+    "__v": 0,
+    "id": "5ae188d6f4e4391f24e6ac10"
+  }],
+  "success": true
+}

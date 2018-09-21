@@ -1,0 +1,276 @@
+<div fxLayout="row wrap">
+    
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxLayoutAlign="end" 
+    (click)="activeFilter()">
+        <img class="icon"src="/assets/images/filter.png">
+    </div>
+    <ng-container *ngIf="filter">
+        <div fxLayout="row wrap">
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex >
+                <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+                    <mat-form-field>
+                        <mat-select placeholder="Select Project"
+                                    [(ngModel)]="advancedFilterdObj.selectedProValue"
+                                    name="projects">
+                            <mat-option *ngFor="let project of tempProjectData?.projects"
+                                        [value]="project?.projectId">
+                                 {{project?.projectName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+                    <mat-form-field>
+                        <mat-select placeholder="Application Type"
+                                    [(ngModel)]="appType"
+                                    name="applicationType"
+                                    (change) = "onChangeObj($event)">
+                            <mat-option  [value]="'all'">All</mat-option>
+                            <mat-option *ngFor="let type of aplicationType"
+                                        [value]="type.value">
+                            {{type.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+                        <!-- <mat-form-field>
+                            <mat-select placeholder="Select Env"
+                                        [(ngModel)]="advancedFilterdObj.selectedEnvValue"
+                                        name="env"
+                                        (change)="fetchEnvData($event)">
+                                <mat-option *ngFor="let env of jobs?.environment"
+                                            [value]="env?.targetEnvId" >
+                                        {{env.targetEnvName}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+                    <mat-form-field>
+                        <mat-select placeholder="Select Application"
+                                name="application"
+                                [disabled]="!appType"
+                                [(ngModel)]="advancedFilterdObj.selectedAppValue">
+                            <ngx-mat-select-search [formControl]="selectedAppFilterCtrl"
+                                             placeholderLabel  = "Search"
+                                             noEntriesFoundLabel  = "No data found"></ngx-mat-select-search>
+                            <mat-option *ngFor="let application of filteredApp | async"
+                                        [value]="application.applicationId">
+                                        {{application.applicationName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex >
+                <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+                    <mat-form-field>
+                        <mat-select placeholder="Select BU"
+                                    [(ngModel)]="advancedFilterdObj.selectedBuValue"
+                                    name="bu">
+                            <mat-option *ngFor="let bu of buList"
+                                [value]="bu.buDetails?.buId">
+                                {{bu?.buDetails?.buName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    </div>
+                <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+                    <mat-form-field>
+                        <input matInput
+                            [matDatepicker]="picker"
+                            placeholder="Start Date"
+                            [(ngModel)]="startDateVal"
+                            name="startDateVal"
+                            (ngModelChange)="fetchStartDate($event)"
+                            (focus)="_openCalendarStart(picker)"
+                                #elementToFocusStart>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+                    <mat-form-field>
+                        <input matInput
+                            [matDatepicker]="picker1"
+                            placeholder="Select End Date"
+                            [(ngModel)]="endDateVal"
+                            name="endDateVal"
+                            (ngModelChange)="fetchEndDate($event)"
+                            (focus)="_openCalendarEnd(picker1)"
+                                #elementToFocusEnd >
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <!-- <div fxFlex.gt-sm="33.33" fxFlex.gt-xs="50" fxFlex="100">
+                    <button mat-raised-button color="primary"
+                        name="jobData"
+                        (click)="JobListFilter(advancedFilterdObj)">Filter</button>
+                </div> -->
+            </div>
+            <div fxFlex.gt-sm="90" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="center">
+                <button mat-raised-button color="primary"
+                        name="jobData"
+                        (click)="JobListFilter(advancedFilterdObj)"
+                        [disabled]="!isDateSelected">Filter</button>
+            </div>
+        </div>
+    </ng-container>
+</div>
+<div *ngIf="jobData.length > 0; else noDataFound" fxLayout="row wrap">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex fxLayoutAlign="start">
+        <h2>
+            <br><b>Job List</b>
+        </h2>
+    </div>
+</div>
+<div fxLayout="row wrap" *ngIf = "jobData.length > 0">
+    <div fxFlex.gt-sm="100" fxFlex.gt-xs="50" fxFlex="100" fxFlex>
+        <mat-accordion>
+            <mat-expansion-panel *ngFor="let job of jobData" class="material-icons"  hideToggle="true" #joblist>
+                <mat-expansion-panel-header>
+                    {{job.execution.executionName}}
+                    <img *ngIf="!joblist.expanded" class="icon1" src="/assets/images/plus.png">
+                    <img *ngIf="joblist.expanded" class="icon1" src="/assets/images/minus.png">
+                    <!-- <mat-icon1 *ngIf="!joblist.expanded" style="color: #00A3E7">add</mat-icon1>
+                    <mat-icon1 *ngIf="joblist.expanded" style="color:#00A3E7">maximize</mat-icon1> -->
+                </mat-expansion-panel-header>
+                <h2>JobDetails</h2>
+                <ngx-datatable
+                    class="bootstrap "
+                    [rows]="job.jobList"
+                    [columnMode]="'force'"
+                    [headerHeight]="50"
+                    [footerHeight]="50"
+                    [rowHeight]="'auto'"
+                    [limit]="10">
+                    <ngx-datatable-column name="No#" [width]="50">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                        Serial No
+                        </ng-template>
+                        <ng-template let-rowIndex="rowIndex"  ngx-datatable-cell-template>
+                        {{rowIndex + 1 }}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <!-- <ngx-datatable-column name="trainName">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            Train Name
+                        </ng-template>
+                        {{job.jobList | json}}
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                         {{row.application.job.jobName}}
+                        </ng-template>
+                    </ngx-datatable-column> -->
+                    <ngx-datatable-column name="application Name">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            Application Name
+                        </ng-template>
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{row.application.applicationName}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                  <ngx-datatable-column name="application Type" [width]="80">
+                    <ng-template let-column="column" ngx-datatable-header-template>
+                      Application Type
+                    </ng-template>
+                    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                      {{row.application.applicationType}}
+                    </ng-template>
+                  </ngx-datatable-column>
+                    <ngx-datatable-column name="startDate" [width]="75">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            Start Date
+                        </ng-template>
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        <div *ngIf="row?.buildStatus == 'Running' || row?.buildStatus == 'Completed'">
+                                {{row?.buildHistory?.buildStartTime | date:'yyyy-MM-dd'}}
+                        </div>
+                        <div *ngIf="(row?.buildStatus == 'Scheduled' || row?.buildStatus == 'Stopped')">
+                                {{row?.scheduledDateTime | date:'yyyy-MM-dd'}} {{ row.scheduledDateTime | date:'shortTime'}}
+                        </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <!-- <ngx-datatable-column name="endDate">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            End Date
+                        </ng-template>
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                        {{row.endDate}}
+                        </ng-template>
+                    </ngx-datatable-column> -->
+                    <ngx-datatable-column name="status" [width]="75">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            Status
+                        </ng-template>
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <span style="color: green" *ngIf="(row.buildStatus == 'Completed' ||
+                            row.buildStatus == 'Running' || row.buildStatus == 'Scheduled')else redMark">
+                              {{row.buildStatus}}
+                            </span>
+                            <ng-template #redMark>
+                              <span style="color: red">
+                              {{row.buildStatus}}
+                            </span>
+                            </ng-template>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="duration" [width]="50">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            Duration
+                        </ng-template>
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <div *ngIf="(row?.buildStatus=='Completed' || row?.buildStatus=='Execution_Failed' || row?.buildStatus=='Failed')">
+                                <div *ngIf="row?.buildHistory?.buildDuration > 60; else buildDuration">
+                                    {{((row?.buildHistory?.buildDuration / 60)-0.5) || '0' | number: '1.0-0' }} Min {{(row?.buildHistory?.buildDuration % 60) || '0' }} Sec 
+                                </div>
+                                <ng-template #buildDuration>
+                                        <div>
+                                            {{row?.buildHistory?.buildDuration || '0'}} Sec
+                                        </div>
+                                </ng-template>
+                            </div>
+                            <div *ngIf="row?.buildStatus=='Scheduled'">
+                                <img class="icon1" src="/assets/images/schedule.png">
+                            </div>
+                            <div *ngIf="row?.buildStatus=='Stopped'">
+                                {{row?.buildHistory?.buildDuration || '0'}} Sec
+                            </div>
+                            <div  *ngIf="row?.buildStatus=='Running'" >
+                              <mat-progress-spinner
+                                class="example-margin"
+                                [diameter]="20" [strokeWidth]="2"
+                                [color]="color"
+                                [mode]="mode"
+                                [value]="value">
+                              </mat-progress-spinner>
+                            </div>
+                        </ng-template>
+                        
+                    </ngx-datatable-column>
+                    <ngx-datatable-column >
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <!-- <button *ngIf="row.buildStatus=='Running'"  [disabled]="row.buildStatus=='Running'" mat-raised-button color="primary">Stop</button> -->
+                            <!-- <button *ngIf="row?.buildStatus=='Completed'"
+                                    mat-raised-button color="primary"
+                                    style="margin-left: 5px">Run Again</button> -->
+                            <div *ngIf="row?.buildStatus=='Scheduled'" >
+                                <button mat-raised-button color="primary"
+                                        (click)="scheduledStop(row?.buildId)"
+                                        style="margin-right: 8px">Stop</button>
+                                    <!-- <button *ngIf="row?.buildStatus=='Scheduled'"
+                                mat-raised-button (click)="buildRun()">Run Now</button> -->
+                            </div>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>
+<ng-template #noDataFound>
+        <div >
+            <h3>
+            <br>No Data Available
+            </h3>
+        </div>
+</ng-template>
