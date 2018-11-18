@@ -5,10 +5,10 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://10.199.108.184:8080/ssp',
+  apiUrl: 'http://localhost:4200',
   app_name: 'Self Service Portal',
   url: 'http://localhost:1515',
-  isApiReady: true,
+  isApiReady: false,
   token: "Bearer eyJ1c2VyX2lkIjoiNWFlMTg4ZDZmNGU0Mz.eyJ1c2VyX2lkIjoiNWFlMTg4ZDZmNGU0Mz" +
   "kxZjI0ZTZhYzEwIiwiaWF0IjoxNTI1MjY0NzE4LCJleHAiOjE1MjUyNzQ3MTh9." +
   "1HZBpHcFgTu1ltAYMHz0eKqRlUWYEomjat696Q7G3Sc"
